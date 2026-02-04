@@ -3,16 +3,16 @@
 # Install all dependencies
 install:
 	cd strapi && npm install
-	@if [ -d "frontend" ]; then cd frontend && npm install; fi
+	cd frontend && npm install
 
-# Development - start all services
+# Development - start Strapi (use 'make dev-frontend' in another terminal for the site)
 dev: dev-strapi
 
-# Start Strapi in development mode
+# Start Strapi in development mode (localhost:1337)
 dev-strapi:
 	cd strapi && npm run develop
 
-# Start frontend in development mode (once created)
+# Start frontend in development mode (localhost:3000)
 dev-frontend:
 	cd frontend && npm run dev
 
@@ -23,13 +23,17 @@ build-strapi:
 	cd strapi && npm run build
 
 build-frontend:
-	@if [ -d "frontend" ]; then cd frontend && npm run build; fi
+	cd frontend && npm run build
 
 # Seed Strapi with example data
 seed:
 	cd strapi && npm run seed:example
 
+# Deploy frontend to Netlify
+deploy:
+	cd frontend && npm run build && netlify deploy --dir=out --prod
+
 # Clean build artifacts and dependencies
 clean:
 	rm -rf strapi/node_modules strapi/.strapi strapi/.tmp strapi/dist
-	@if [ -d "frontend" ]; then rm -rf frontend/node_modules frontend/.next; fi
+	rm -rf frontend/node_modules frontend/.next frontend/out
